@@ -83,12 +83,12 @@ void listarJogadoresRanking(FILE *file) {
     setlocale(LC_ALL, "Portuguese");
 
     if(file) {
-        int i = 1;
+        int i = 0;
         JOGADOR jogador;
 
-        while(i <= sizeof(JOGADOR)) {
+        while(i < fseek(file, 0, SEEK_END)) {
             while(fread(&jogador, sizeof(JOGADOR), 1, file)) {
-                if(jogador.ranking == i) {
+                if(jogador.ranking == i + 1) {
                     printf("%d - %s\n", jogador.ranking, jogador.nickname);
                     i++;
                 }

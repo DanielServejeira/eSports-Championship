@@ -272,7 +272,30 @@ void pontuacaoMenorQue(FILE *file) {
     setlocale(LC_ALL, "Portuguese");
 
     if(file) {
+        int i = 0, indice;
+        JOGADOR jogador;
 
+        printf("\n\tInsira um número para listar jogadores com uma pontuação menor.\n\n");
+        scanf("%d", &indice);
+        printf("\n");
+
+        if(indice < 0) {
+            printf("\n\tInsira um comando válido.\n\n");
+            system("Pause");
+            system("cls");
+            pontuacaoMenorQue(file);
+        }
+
+        while(indice >= 0) {
+            while(fread(&jogador, sizeof(JOGADOR), 1, file)) {
+                if(jogador.status.pontuacao == indice) {
+                    printf("%d - %s\n", jogador.ranking, jogador.nickname);
+                    printf("Pontuação: %d\n\n", jogador.status.pontuacao);
+                }
+            }
+            indice--;
+            fseek(file, 0, SEEK_SET);
+        }
     }
     else perror("\tErro ao abrir o arquivo.\n\n");
 

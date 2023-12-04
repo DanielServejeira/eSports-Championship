@@ -68,7 +68,9 @@ void main() {
             pontuacaoMaiorQue(file);
             break;
         case 9:
+            file = fopen("banco.dat", "rb");
             pontuacaoMenorQue(file);
+            fclose(file);
             break;
         case 10:
             buscarJogadorNome(file);

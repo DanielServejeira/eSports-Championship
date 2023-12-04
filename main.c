@@ -76,7 +76,9 @@ void main() {
             buscarJogadorNome(file);
             break;
         case 11:
+            file = fopen("banco.dat", "rb");
             buscarJogadorRanking(file);
+            fclose(file);
             break;
         case 12:
             mediaDeSeguidores(file);

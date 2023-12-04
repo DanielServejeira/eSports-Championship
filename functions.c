@@ -86,6 +86,7 @@ void listarJogadoresRanking(FILE *file) {
         int i = 0;
         JOGADOR jogador;
 
+        fseek(file, 0, SEEK_SET);
         while(i < fseek(file, 0, SEEK_END)) {
             while(fread(&jogador, sizeof(JOGADOR), 1, file)) {
                 if(jogador.ranking == i + 1) {
@@ -119,6 +120,7 @@ void alterarJogador(FILE *file) {
         JOGADOR jogador;
 
         do {
+            fseek(file, 0, SEEK_SET);
             while(fread(&jogador, sizeof(JOGADOR), 1, file)) {
                 printf("%d - %s\n", i, jogador.nickname);
                 i++;
@@ -166,6 +168,7 @@ void inserirResultado(FILE *file) {
         JOGADOR jogador;
 
         do {
+            fseek(file, 0, SEEK_SET);
             while(fread(&jogador, sizeof(JOGADOR), 1, file)) {
                 printf("%d - %s\n", i, jogador.nickname);
                 i++;
@@ -237,6 +240,7 @@ void listarClassificacao(FILE *file) {
         int i = 0;
         JOGADOR jogador;
 
+        fseek(file, 0, SEEK_SET);
         while(i < fseek(file, 0, SEEK_END)) {
             while(fread(&jogador, sizeof(JOGADOR), 1, file)) {
                 if(jogador.ranking == i + 1) {
@@ -286,6 +290,7 @@ void pontuacaoMenorQue(FILE *file) {
             pontuacaoMenorQue(file);
         }
 
+        fseek(file, 0, SEEK_SET);
         while(indice >= 0) {
             while(fread(&jogador, sizeof(JOGADOR), 1, file)) {
                 if(jogador.status.pontuacao == indice) {
@@ -317,6 +322,32 @@ void buscarJogadorRanking(FILE *file) {
     setlocale(LC_ALL, "Portuguese");
 
     if(file) {
+        JOGADOR jogador;
+        int busca, verif = 1;
+
+        printf("\n\tInsira um número para ver o jogador que está em seu ranking\n\n");
+        scanf("%d", &busca);
+
+        if(busca < 1) {
+            printf("\n\tInsira um comando válido.\n\n");
+            system("Pause");
+            system("cls");
+            buscarJogadorRanking(file);
+        }
+
+        fseek(file, 0, SEEK_SET);
+        while(fread(&jogador, sizeof(JOGADOR), 1, file)) {
+            if(jogador.ranking == busca) {
+                printf("\n\tJogador encontrado.\n\n");
+                printf("%d - %s\n\n", jogador.ranking, jogador.nickname);
+                verif = 0;
+                break;
+            }
+        }
+
+        if(verif) {
+            printf("\n\tJogador não encontrado.\n\n");
+        }
 
     }
     else perror("\tErro ao abrir o arquivo.\n\n");

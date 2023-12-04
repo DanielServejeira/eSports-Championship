@@ -60,7 +60,7 @@ void main() {
             fclose(file);
             break;
         case 7:
-            file = fopen("banco.dat", "rb+");
+            file = fopen("banco.dat", "rb");
             listarClassificacao(file);
             fclose(file);
             break;

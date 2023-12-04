@@ -184,7 +184,7 @@ void inserirResultado(FILE *file) {
                 printf("\n");
                 break;
             }
-            if((indice >= 0 && indice < i - 1)) {
+            if(indice >= 0 && indice < i - 1) {
                 system("cls");
                 printf("\n\tJogador escolhido: %s", jogador.nickname);
                 printf("\n\tPontuação atual: %d", jogador.status.pontuacao);
@@ -240,8 +240,8 @@ void listarClassificacao(FILE *file) {
         int i = 0;
         JOGADOR jogador;
 
-        fseek(file, 0, SEEK_SET);
         while(i < fseek(file, 0, SEEK_END)) {
+            fseek(file, 0, SEEK_SET);
             while(fread(&jogador, sizeof(JOGADOR), 1, file)) {
                 if(jogador.ranking == i + 1) {
                     printf("%d - %s\n", i, jogador.nome);
@@ -253,7 +253,6 @@ void listarClassificacao(FILE *file) {
                     break;
                 }
             }
-            fseek(file, 0, SEEK_SET);
         }
     }
     else perror("\tErro ao abrir o arquivo.\n\n");
@@ -290,8 +289,8 @@ void pontuacaoMenorQue(FILE *file) {
             pontuacaoMenorQue(file);
         }
 
-        fseek(file, 0, SEEK_SET);
         while(indice >= 0) {
+            fseek(file, 0, SEEK_SET);
             while(fread(&jogador, sizeof(JOGADOR), 1, file)) {
                 if(jogador.status.pontuacao == indice) {
                     printf("%d - %s\n", jogador.ranking, jogador.nickname);
@@ -299,7 +298,6 @@ void pontuacaoMenorQue(FILE *file) {
                 }
             }
             indice--;
-            fseek(file, 0, SEEK_SET);
         }
     }
     else perror("\tErro ao abrir o arquivo.\n\n");
@@ -325,30 +323,40 @@ void buscarJogadorRanking(FILE *file) {
         JOGADOR jogador;
         int busca, verif = 1;
 
-        printf("\n\tInsira um número para ver o jogador que está em seu ranking\n\n");
-        scanf("%d", &busca);
+        do {
+            printf("\n\tInsira um número para ver o jogador que está em seu ranking\n");
+            printf("\n0 - Voltar ao menu.\n\n");
+            scanf("%d", &busca);
 
-        if(busca < 1) {
-            printf("\n\tInsira um comando válido.\n\n");
-            system("Pause");
-            system("cls");
-            buscarJogadorRanking(file);
-        }
-
-        fseek(file, 0, SEEK_SET);
-        while(fread(&jogador, sizeof(JOGADOR), 1, file)) {
-            if(jogador.ranking == busca) {
-                printf("\n\tJogador encontrado.\n\n");
-                printf("%d - %s\n\n", jogador.ranking, jogador.nickname);
-                verif = 0;
-                break;
+            if(busca < 0) {
+                printf("\n\tInsira um comando válido.\n\n");
+                system("Pause");
+                system("cls");
             }
-        }
+            else {
+                if(busca == 0) {
+                    printf("\n");
+                    break;
+                }
+                else {
+                    fseek(file, 0, SEEK_SET);
+                    while(fread(&jogador, sizeof(JOGADOR), 1, file)) {
+                        if(jogador.ranking == busca) {
+                            printf("\n\tJogador encontrado.\n\n");
+                            printf("%d - %s\n\n", jogador.ranking, jogador.nickname);
+                            verif = 0;
+                            break;
+                        }
+                    }
 
-        if(verif) {
-            printf("\n\tJogador não encontrado.\n\n");
-        }
-
+                    if(verif) {
+                        printf("\n\tJogador não encontrado.\n\n");
+                        system("Pause");
+                        system("cls");
+                    }
+                }
+            }
+        } while(busca != 0);
     }
     else perror("\tErro ao abrir o arquivo.\n\n");
 

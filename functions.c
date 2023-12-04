@@ -91,6 +91,7 @@ void listarJogadoresRanking(FILE *file) {
                 if(jogador.ranking == i + 1) {
                     printf("%d - %s\n", jogador.ranking, jogador.nickname);
                     i++;
+                    break;
                 }
             }
             fseek(file, 0, SEEK_SET);
@@ -134,6 +135,8 @@ void alterarJogador(FILE *file) {
                 break;
             }
             if((indice >= 0 && indice < i - 1)) {
+                system("cls");
+
 
                 fseek(file, indice * sizeof(file), SEEK_SET);
                 fwrite(&jogador, sizeof(JOGADOR), 1, file);
@@ -159,7 +162,68 @@ void inserirResultado(FILE *file) {
     setlocale(LC_ALL, "Portuguese");
 
     if(file) {
+        int i = 1, indice, menuPontuacao;
+        JOGADOR jogador;
 
+        do {
+            while(fread(&jogador, sizeof(JOGADOR), 1, file)) {
+                printf("%d - %s\n", i, jogador.nickname);
+                i++;
+            }
+
+            printf("\n\tInsira o índice do jogador desejado para alterar sua pontuação.\n\n");
+            printf("0 - Voltar ao menu\n\n");
+            scanf("%d", &indice);
+            getchar();
+            indice--;
+
+            if(indice == -1) {
+                printf("\n");
+                break;
+            }
+            if((indice >= 0 && indice < i - 1)) {
+                system("cls");
+                printf("\n\tJogador escolhido: %s", jogador.nickname);
+                printf("\n\tPontuação atual: %d", jogador.status.pontuacao);
+                printf("\n\nInserir \n"
+                       "1 - Vitória\n"
+                       "2 - Empate\n"
+                       "3 - Derrota\n");
+                scanf("%d", menuPontuacao);
+
+                switch(menuPontuacao) {
+                case 1:
+                    jogador.status.vitorias += 1;
+                    jogador.status.pontuacao += 3;
+                    break;
+                case 2:
+                    jogador.status.empates += 1;
+                    jogador.status.pontuacao += 1;
+                    break;
+                case 3:
+                    jogador.status.derrotas += 1;
+                    break;
+                default:
+                    printf("\n\tInsira um comando válido.\n\n");
+                    system("Pause");
+                    system("cls");
+                    inserirResultado(file);
+                    break;
+                }
+                fseek(file, indice * sizeof(file), SEEK_SET);
+                fwrite(&jogador, sizeof(JOGADOR), 1, file);
+
+                printf("\n\tPontuação alterada com sucesso.\n\n");
+                system("Pause");
+                system("cls");
+                inserirResultado(file);
+            }
+            else {
+                printf("\n\tInsira um comando válido.\n\n");
+                system("Pause");
+                system("cls");
+            }
+        } while(indice != -1);
     }
     else perror("\tErro ao abrir o arquivo.\n\n");
 
@@ -170,7 +234,23 @@ void listarClassificacao(FILE *file) {
     setlocale(LC_ALL, "Portuguese");
 
     if(file) {
+        int i = 0;
+        JOGADOR jogador;
 
+        while(i < fseek(file, 0, SEEK_END)) {
+            while(fread(&jogador, sizeof(JOGADOR), 1, file)) {
+                if(jogador.ranking == i + 1) {
+                    printf("%d - %s\n", i, jogador.nome);
+                    printf("Pontuação: %d\n", jogador.status.pontuacao);
+                    printf("Vitórias: %d\n", jogador.status.vitorias);
+                    printf("Empates: %d\n", jogador.status.empates);
+                    printf("Derrotas: %d\n\n", jogador.status.derrotas);
+                    i++;
+                    break;
+                }
+            }
+            fseek(file, 0, SEEK_SET);
+        }
     }
     else perror("\tErro ao abrir o arquivo.\n\n");
 

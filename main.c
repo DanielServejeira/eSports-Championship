@@ -33,79 +33,58 @@ void main() {
 
         switch(menu) {
         case 0:
-            break;
+            return;
         case 1:
             escreverJogador(file);
             lerJogador(file);
-            system("Pause");
-            system("cls");
             break;
         case 2:
             listarJogadoresAlfabetica(file);
-            system("Pause");
-            system("cls");
             break;
         case 3:
             file = fopen("banco.dat", "rb");
             listarJogadoresRanking(file);
             fclose(file);
-            system("Pause");
-            system("cls");
             break;
         case 4:
             listarJogadoresVitorias(file);
-            system("Pause");
-            system("cls");
             break;
         case 5:
             file = fopen("banco.dat", "rb+");
             alterarJogador(file);
             fclose(file);
-            system("Pause");
-            system("cls");
             break;
         case 6:
+            file = fopen("banco.dat", "rb+");
             inserirResultado(file);
-            system("Pause");
-            system("cls");
+            fclose(file);
             break;
         case 7:
+            file = fopen("banco.dat", "rb+");
             listarClassificacao(file);
-            system("Pause");
-            system("cls");
+            fclose(file);
             break;
         case 8:
             pontuacaoMaiorQue(file);
-            system("Pause");
-            system("cls");
             break;
         case 9:
             pontuacaoMenorQue(file);
-            system("Pause");
-            system("cls");
             break;
         case 10:
             buscarJogadorNome(file);
-            system("Pause");
-            system("cls");
             break;
         case 11:
             buscarJogadorRanking(file);
-            system("Pause");
-            system("cls");
             break;
         case 12:
             mediaDeSeguidores(file);
-            system("Pause");
-            system("cls");
             break;
         default:
             printf("\n\tInsira um comando válido.\n\n");
-            system("Pause");
-            system("cls");
             break;
         }
-    } while(menu != 0);
 
-    return;
+        system("Pause");
+        system("cls");
+    } while(menu != 0);
 }

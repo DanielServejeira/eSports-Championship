@@ -51,7 +51,7 @@ void lerJogador(JOGADOR lista[], int index);
 void listarJogadoresAlfabetica(FILE *jogadores, int n);
 void listarJogadoresRanking(FILE *file, int n);
 void listarJogadoresVitorias(FILE *jogadores, int n);
-void alterarJogador(FILE *jogadores, int n);
+void alterarJogador(FILE *jogadores, int *n);
 void inserirResultado(FILE *jogadores, int n);
 void listarClassificacao(FILE *jogadores, int n);
 void pontuacaoMaiorQue(FILE *jogadores, int n);

@@ -57,7 +57,7 @@ void main() {
             break;
         case 5:
             file = fopen("banco.dat", "rb+");
-            alterarJogador(file, n);
+            alterarJogador(file, &n);
             break;
         case 6:
             file = fopen("banco.dat", "rb+");

@@ -8,8 +8,8 @@ void numeroDeJogadores(FILE *jogadores, int *n){
     if (jogadores != NULL) {
         fseek(jogadores, 0, SEEK_END);
         if (ftell(jogadores) != 0){
-//            printf("ftell>> %d", ftell(jogadores));
-            *n = ftell(jogadores)/sizeof(JOGADOR); // Se o arquivo existir e não estiver vazio, retorna quantos jogadores há
+            *n = ftell(jogadores)/sizeof(JOGADOR);
+            // Se o arquivo existir e não estiver vazio, retorna quantos jogadores há
         } else *n = 1; // Se estiver vazio, inicia n como 1
     } else {
         jogadores = fopen("banco.dat", "wb");
@@ -133,6 +133,7 @@ void escreverJogador(FILE *jogadores, int n) {
         do{printf("Posição do jogador no ranking: ");
         scanf("%d", &novoJogador->ranking);}while(verificarRanking(np, jogadores, n) == 0);
 
+        fwrite(novoJogador, sizeof(JOGADOR), 1, jogadores);
         fclose(jogadores);
     }
     else perror("\tErro ao abrir o arquivo.\n\n");
@@ -305,13 +306,13 @@ void listarJogadoresVitorias(FILE *jogadores, int n) {
     else perror("\tErro ao abrir o arquivo.\n\n");
 }
 
-void alterarJogador(FILE *jogadores, int n) {
+void alterarJogador(FILE *jogadores, int *n) {
     if(jogadores) {
-        JOGADOR lista[n];
-        int playerIndex, toChange;
+        JOGADOR lista[*n];
+        int playerIndex, toChange, a;
         fread(lista, sizeof(lista), 1, jogadores);
 
-        qsort(lista, n, sizeof(JOGADOR), comparePlayersName);
+        qsort(lista, *n, sizeof(JOGADOR), comparePlayersName);
 
         printf("===== JOGADORES =====\n");
         for (int i = 0; i < sizeof(lista)/sizeof(JOGADOR); i ++){
@@ -322,7 +323,7 @@ void alterarJogador(FILE *jogadores, int n) {
 
         if (playerIndex == 0) {
             return;
-        } if (playerIndex < 0 || playerIndex > n) {
+        } if (playerIndex < 0 || playerIndex > *n) {
             printf("Valor inválido. Considerado como 0. Retornando...\n");
             return;
         } else {
@@ -415,9 +416,24 @@ void alterarJogador(FILE *jogadores, int n) {
                     do{scanf("%d", &lista[playerIndex].titulos);}while(lista[playerIndex].titulos < 0);
                     break;
                 case 22:
-                    do{scanf("%d", &lista[playerIndex].ranking);}while(verificarRanking(lista[playerIndex], jogadores, n) == 0);
+                    do{scanf("%d", &lista[playerIndex].ranking);}while(verificarRanking(lista[playerIndex], jogadores, *n) == 0);
                     break;
                 case 23:
+                    printf("Tem certeza?\n[1] Deletar jogador\n[2] Cancelar operação\n");
+                    do{printf(">>> ");
+                    scanf("%d", &a);} while(a != 1 && a != 2);
+                    if (a == 1){
+                        a = *n;
+                        JOGADOR temp = lista[a-1];
+                        lista[a-1] = lista[playerIndex];
+                        lista[playerIndex] = temp;
+                        (*n)--;
+                        printf("Jogador deletado", *n);
+                        break;
+                    } else {
+                        printf("Operação cancelada! Retornando...\n");
+                        return;
+                    }
 
                 case 0:
                     return;
@@ -428,7 +444,7 @@ void alterarJogador(FILE *jogadores, int n) {
 
             fclose(jogadores);
             jogadores = fopen("banco.dat", "wb");
-            fwrite(lista, sizeof(JOGADOR), n, jogadores);
+            fwrite(lista, sizeof(JOGADOR), *n, jogadores);
             fclose(jogadores);
         }
     }

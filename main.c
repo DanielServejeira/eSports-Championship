@@ -1,33 +1,35 @@
 //Trabalho Prático 3 da matéria de Algoritmos e Técnicas de Programação 2
-//Integrantes: Daniel Henrique e Pedro Alonso
+//Integrantes: Daniel Henrique Peres Servejeira e Pedro Alonso Oliveira dos Santos
 
 #include<stdio.h>
 #include<stdlib.h>
 #include<locale.h>
-
 #include "functions.h"
 
 void main() {
     setlocale(LC_ALL, "Portuguese");
+//    printf("%d\n", sizeof(JOGADOR));
 
-    int menu;
+    int menu, n;
     FILE *file;
 
     do {
+        file = fopen("banco.dat", "rb");
+        numeroDeJogadores(file, &n);
         printf("\n\tMENU\n\n");
-        printf("1 - Escrita e Leitura de Jogadores\n");
-        printf("2 - Listar Jogadores\n");
-        printf("3 - Listar Posição dos Jogadores no Ranking\n");
-        printf("4 - Listar Jogadores com mais Vitórias\n");
-        printf("5 - Alterar Dados de um Jogador\n");
-        printf("6 - Inserir e Atualizar Pontuação no Campeonato\n");
-        printf("7 - Listar Classificação do Campeonato\n");
-        printf("8 - Listar Jogadores com Pontuação Maior que um Valor\n");
-        printf("9 - Listar Jogadores com Pontuação Menor que um Valor\n");
+        printf("01 - Escrever novo jogador\n");
+        printf("02 - Listar jogadores em ordem alfabética\n");
+        printf("03 - Listar posição dos jogadores no ranking\n");
+        printf("04 - Listar jogadores com mais vitórias\n");
+        printf("05 - Alterar Dados de um Jogador\n");
+        printf("06 - Inserir e Atualizar Pontuação no Campeonato\n");
+        printf("07 - Listar Classificação do Campeonato\n");
+        printf("08 - Listar Jogadores com Pontuação Maior que um Valor\n");
+        printf("09 - Listar Jogadores com Pontuação Menor que um Valor\n");
         printf("10 - Buscar Jogador por Nome\n");
         printf("11 - Buscar Jogador por Posição no Ranking\n");
         printf("12 - Mostrar a Quantidade Média de Seguidores de um Jogador\n");
-        printf("0 - Sair\n\n");
+        printf("00 - Sair\n\n");
         scanf("%d", &menu);
         system("cls");
 
@@ -35,45 +37,50 @@ void main() {
         case 0:
             return;
         case 1:
-            escreverJogador(file);
-            lerJogador(file);
+            file = fopen("banco.dat", "ab+");
+            escreverJogador(file, n);
             break;
         case 2:
-            listarJogadoresAlfabetica(file);
+            file = fopen("banco.dat", "rb");
+            listarJogadoresAlfabetica(file, n);
+            fclose(file);
             break;
         case 3:
             file = fopen("banco.dat", "rb");
-            listarJogadoresRanking(file);
+            listarJogadoresRanking(file, n);
             fclose(file);
             break;
         case 4:
-            listarJogadoresVitorias(file);
+            file = fopen("banco.dat", "rb");
+            listarJogadoresVitorias(file, n);
+            fclose(file);
             break;
         case 5:
             file = fopen("banco.dat", "rb+");
-            alterarJogador(file);
-            fclose(file);
+            alterarJogador(file, n);
             break;
         case 6:
             file = fopen("banco.dat", "rb+");
-            inserirResultado(file);
-            fclose(file);
+            inserirResultado(file, n);
             break;
         case 7:
             file = fopen("banco.dat", "rb");
-            listarClassificacao(file);
+            listarClassificacao(file, n);
             fclose(file);
             break;
         case 8:
-            pontuacaoMaiorQue(file);
+            file = fopen("banco.dat", "rb");
+            pontuacaoMaiorQue(file, n);
             break;
         case 9:
             file = fopen("banco.dat", "rb");
-            pontuacaoMenorQue(file);
+            pontuacaoMenorQue(file, n);
             fclose(file);
             break;
         case 10:
-            buscarJogadorNome(file);
+            file = fopen("banco.dat", "rb");
+            buscarJogadorNome(file, n);
+            fclose(file);
             break;
         case 11:
             file = fopen("banco.dat", "rb");
@@ -81,13 +88,14 @@ void main() {
             fclose(file);
             break;
         case 12:
-            mediaDeSeguidores(file);
+            file = fopen("banco.dat", "rb");
+            mediaDeSeguidores(file, n);
+            fclose(file);
             break;
         default:
             printf("\n\tInsira um comando válido.\n\n");
             break;
         }
-
         system("Pause");
         system("cls");
     } while(menu != 0);

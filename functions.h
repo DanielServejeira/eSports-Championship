@@ -32,7 +32,7 @@ typedef struct campeonato {
 typedef struct jogador{
     char nome[50];
     DATA nascimento;
-    char cpf[11];
+    char cpf[12];
     char genero;
     E_CIVIL estadoCivil;
     EQUIPE equipe;

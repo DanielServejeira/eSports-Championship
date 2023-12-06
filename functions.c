@@ -5,7 +5,7 @@
 
 void numeroDeJogadores(FILE *jogadores, int *n){
 
-    if (jogadores != NULL) {
+    if (jogadores) {
         fseek(jogadores, 0, SEEK_END);
         if (ftell(jogadores) != 0){
             *n = ftell(jogadores)/sizeof(JOGADOR);
@@ -133,6 +133,7 @@ void escreverJogador(FILE *jogadores, int n) {
         do{printf("Posição do jogador no ranking: ");
         scanf("%d", &novoJogador->ranking);}while(verificarRanking(np, jogadores, n) == 0);
 
+        fseek(jogadores, 0, SEEK_SET);
         fwrite(novoJogador, sizeof(JOGADOR), 1, jogadores);
         fclose(jogadores);
     }
@@ -428,7 +429,7 @@ void alterarJogador(FILE *jogadores, int *n) {
                         lista[a-1] = lista[playerIndex];
                         lista[playerIndex] = temp;
                         (*n)--;
-                        printf("Jogador deletado", *n);
+                        printf("Jogador deletado\n", *n);
                         break;
                     } else {
                         printf("Operação cancelada! Retornando...\n");

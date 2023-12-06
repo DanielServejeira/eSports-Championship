@@ -307,13 +307,17 @@ void listarJogadoresVitorias(FILE *jogadores, int n) {
     else perror("\tErro ao abrir o arquivo.\n\n");
 }
 
+int comparePlayersNickname(const void *a, const void *b) {
+    return (strcmp(((const JOGADOR *)a)->nickname, ((const JOGADOR *)b)->nickname));
+}
+
 void alterarJogador(FILE *jogadores, int *n) {
     if(jogadores) {
         JOGADOR lista[*n];
         int playerIndex, toChange, a;
         fread(lista, sizeof(lista), 1, jogadores);
 
-        qsort(lista, *n, sizeof(JOGADOR), comparePlayersName);
+        qsort(lista, *n, sizeof(JOGADOR), comparePlayersNickname);
 
         printf("===== JOGADORES =====\n");
         for (int i = 0; i < sizeof(lista)/sizeof(JOGADOR); i ++){
@@ -596,11 +600,11 @@ void pontuacaoMenorQue(FILE *file, int n) {
         while(indice >= 0) {
             fseek(file, 0, SEEK_SET);
             while(fread(&jogador, sizeof(JOGADOR), 1, file)) {
-                j++;
                 if(jogador.status.pontuacao == indice) {
                     printf("[%d] %d pontos - %s\n", j, jogador.status.pontuacao, jogador.nickname);
                     printf("%d V | %d E | %d D\n", jogador.status.vitorias, jogador.status.empates, jogador.status.derrotas);
                     printf("---------------------\n");
+                    j++;
                 }
             }
             indice--;
